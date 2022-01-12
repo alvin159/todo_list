@@ -1,0 +1,58 @@
+.App {
+  text-align: center;
+  height: 23.90cm;    
+  background-color: #671fdb;
+}
+
+.info {
+  text-align: center;
+  height: 23.90cm;  
+  background-color: #1fdbac;
+}
+
+.settings { 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .5rem .5rem .5rem;
+}
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.list {
+  margin: 2rem auto;
+  max-width: 500px;
+  padding: .5rem .5rem .5rem;
+  box-shadow: 0.1rem 0.1rem 0.4rem #aaaaaa;  
+  background-color: #2b21bd;
+}
+
+@media all and (max-width: 500px) {
+  .todo {
+    text-align: center;  
+    height: 23.90cm;  
+    background-color: #df1111;
+  }
+  
+  .info {
+    text-align: center;
+    height: 23.90cm;  
+    background-color: #46d31b;
+  }
+
+  .list {
+    margin: 2rem auto;
+    max-width: 300px;
+    padding: .5rem .5rem .5rem;
+    box-shadow: 0.1rem 0.1rem 0.4rem #aaaaaa;  
+    background-color: #26b413;
+  }
+}

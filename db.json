@@ -1,0 +1,79 @@
+{
+  "todos": [
+    {
+      "title": "Groceries to lidl",
+      "status": "completed",
+      "date": "10/10/2021, 11:03:43",
+      "tags": "relax",
+      "color": "green",
+      "id": 1
+    },
+    {
+      "title": "Cycle alone",
+      "status": "completed",
+      "date": "10/10/2021, 11:03:35",
+      "tags": "relax",
+      "color": "green",
+      "id": 2
+    },
+    {
+      "title": "Homework",
+      "status": "undone",
+      "date": "10/10/2021, 11:32:28",
+      "tags": "important",
+      "color": "red",
+      "id": 3
+    },
+    {
+      "title": "Working",
+      "status": "undone",
+      "date": "05/10/2021, 11:20:30",
+      "tags": "Academic",
+      "color": "red",
+      "id": 5
+    },
+    {
+      "title": "Hiking",
+      "status": "undone",
+      "date": "10/10/2021, 11:25:55",
+      "tags": "relax",
+      "color": "red",
+      "id": 6
+    },
+    {
+      "title": "Eat",
+      "status": "completed",
+      "date": "29/10/2021, 12:32:28",
+      "tags": "hungry",
+      "color": "green",
+      "id": 7
+    },
+    {
+      "title": "Jogging",
+      "status": "undone",
+      "date": "22/10/2021, 17:09:04",
+      "tags": "relax",
+      "color": "red",
+      "id": 8
+    },
+    {
+      "title": "Breakfast",
+      "status": "completed",
+      "date": "24/10/2021, 17:57:59",
+      "tags": "important",
+      "color": "green",
+      "id": 9
+    },
+    {
+      "title": "Climb",
+      "status": "completed",
+      "date": "24/10/2021, 18:12:24",
+      "tags": "important",
+      "color": "green",
+      "id": 10
+    }
+  ],
+  "color": {
+    "backgroundColor": "#df961c"
+  }
+}
