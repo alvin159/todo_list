@@ -1,6 +1,6 @@
 # Todo List App
 
-A simple Todo List web application built with **React** for the frontend and **Node.js / Express / MongoDB** for the backend.
+A simple Todo List web application built with **JavaScript**, using **React** for the frontend and **Node.js / Express / MongoDB** for the backend.
 
 ---
 
