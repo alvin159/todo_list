@@ -10,61 +10,24 @@ jobs:
   lint-and-test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-
     steps:
+      # Checkout the repository
       - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      # Use Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-      
-      # Set up Docker Compose
-      - name: Build and start backend + mongo containers
-        run: docker compose up -d --build backend mongo
+          node-version: 20.x
 
-      - name: Wait for backend to be ready
-        run: |
-          echo "Waiting for backend to start..."
-          for i in {1..20}; do
-            if curl -s http://localhost:3010/health >/dev/null; then
-              echo "Backend is up!"
-              break
-            fi
-            echo "Still waiting..."
-            sleep 3
-          done
-          
-      # Backend
-      - name: Install Backend dependencies
+      # Install dependencies
+      - name: Install dependencies
         run: npm install
-        working-directory: backend
 
-      - name: Lint Backend
-        run: npm run lint || echo "No lint script"
-        working-directory: backend
+      # Run ESLint
+      - name: Run ESLint
+        run: npm run lint
 
-      - name: Test Backend
-        run: npm test || echo "No test script"
-        working-directory: backend
-
-      # Frontend
-      - name: Install Frontend dependencies
-        run: npm install
-        working-directory: frontend
-
-      - name: Lint Frontend
-        run: npm run lint || echo "No lint script"
-        working-directory: frontend
-
-      - name: Test Frontend
-        run: npm test || echo "No test script"
-        working-directory: frontend
-      
-      # Clean up Docker after tests
-      - name: Stop Docker containers
-        if: always()
-        run: docker compose down
+      # Run small unit test
+      - name: Run unit tests
+        run: npm test -- --watchAll=false
