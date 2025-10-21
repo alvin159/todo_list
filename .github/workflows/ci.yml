@@ -10,16 +10,15 @@ jobs:
   lint-and-test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-
     steps:
+      # Checkout the repository
       - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      # Use Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
+<<<<<<< HEAD
           node-version: ${{ matrix.node-version }}
 
       # Backend
@@ -34,10 +33,14 @@ jobs:
       - name: Test Backend
         run: npm test || echo "No test script"
         working-directory: ./backend
+=======
+          node-version: 20.x
+>>>>>>> bc8958bd432dd3d3d02db9417a959614e87d01d9
 
-      # Frontend
-      - name: Install Frontend dependencies
+      # Install dependencies
+      - name: Install dependencies
         run: npm install
+<<<<<<< HEAD
         working-directory: ./frontend
 
       - name: Lint Frontend
@@ -47,3 +50,13 @@ jobs:
       - name: Test Frontend
         run: npm test || echo "No test script"
         working-directory: ./frontend
+=======
+
+      # Run ESLint
+      - name: Run ESLint
+        run: npm run lint
+
+      # Run small unit test
+      - name: Run unit tests
+        run: npm test -- --watchAll=false
+>>>>>>> bc8958bd432dd3d3d02db9417a959614e87d01d9
