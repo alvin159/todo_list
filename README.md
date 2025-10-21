@@ -19,8 +19,8 @@ A simple Todo List web application built with **JavaScript**, using **React** fo
 
 ## Prerequisites
 
-- Node.js installed
-- npm or yarn package manager
+- Docker & Docker Compose installed
+- Node.js (for running the frontend locally)
 
 ### Required Packages
 
@@ -35,56 +35,27 @@ A simple Todo List web application built with **JavaScript**, using **React** fo
 
 ## Setup Instructions
 
-### 1. Backend
+### 1. Start Backend and Database with Docker
 
-1. Navigate to the `backend` folder:
+Run the backend (Express) and MongoDB using Docker Compose:
 
 ```bash
-cd backend
+docker compose up --build backend mongo
 ```
-
-2. Create a .env file with the following content:
-```bash
-PORT=3010
-MONGODB_URI=your_mongodb_connection_string
-```
-
-3. Install dependencies:
-```bash
-Copy code
-npm install
-```
-
-4. Start the server:
-```bash
-node server.js
-Your backend will run at http://localhost:3010.
-```
+This will:
+- Build and run the backend on http://localhost:3010
+- Start MongoDB in a container
+- Use the shared Docker network (todo-net)
 
 ### 2. Frontend
-1. Navigate to the frontend folder:
-
+In a separate terminal:
 ```bash
 cd frontend
-```
-
-2. Install dependencies:
-
-```bash
 npm install
-```
-
-3. Create a .env file with the API URL:
-```bash
-REACT_APP_API_URL=http://localhost:3010
-```
-
-4. Start the React app:
-```bash
 npm start
 ```
-
-Open your browser at http://localhost:3000.
+Then open http://localhost:3000 in your browser.
+Your React app will automatically connect to the backend via http://localhost:3010
 
 ### Usage
 - Add todos using the top input bar.

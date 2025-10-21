@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  # Backend service (Node / Express)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
+    ports:
+      - "3010:3010"
+    networks:
+      - todo-net
+
+
+  # MongoDB
+  mongo:
+    image: mongo:6
+    container_name: todo_mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - todo-net
+
+  # Nginx serving production frontend
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    container_name: todo_nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - todo-net
+
+volumes:
+  mongo_data:
+
+networks:
+  todo-net:
+    driver: bridge
