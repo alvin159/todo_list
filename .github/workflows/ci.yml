@@ -18,7 +18,6 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-<<<<<<< HEAD
           node-version: ${{ matrix.node-version }}
 
       # Backend
@@ -33,14 +32,10 @@ jobs:
       - name: Test Backend
         run: npm test || echo "No test script"
         working-directory: ./backend
-=======
-          node-version: 20.x
->>>>>>> bc8958bd432dd3d3d02db9417a959614e87d01d9
 
       # Install dependencies
       - name: Install dependencies
         run: npm install
-<<<<<<< HEAD
         working-directory: ./frontend
 
       - name: Lint Frontend
@@ -50,13 +45,3 @@ jobs:
       - name: Test Frontend
         run: npm test || echo "No test script"
         working-directory: ./frontend
-=======
-
-      # Run ESLint
-      - name: Run ESLint
-        run: npm run lint
-
-      # Run small unit test
-      - name: Run unit tests
-        run: npm test -- --watchAll=false
->>>>>>> bc8958bd432dd3d3d02db9417a959614e87d01d9
