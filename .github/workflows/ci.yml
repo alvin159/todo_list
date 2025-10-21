@@ -21,50 +21,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      
-      # Set up Docker Compose
-      - name: Build and start backend + mongo containers
-        run: docker compose up -d --build backend mongo
 
-      - name: Wait for backend to be ready
-        run: |
-          echo "Waiting for backend to start..."
-          for i in {1..20}; do
-            if curl -s http://localhost:3010/health >/dev/null; then
-              echo "Backend is up!"
-              break
-            fi
-            echo "Still waiting..."
-            sleep 3
-          done
-          
       # Backend
       - name: Install Backend dependencies
         run: npm install
-        working-directory: backend
+        working-directory: ./backend
 
       - name: Lint Backend
         run: npm run lint || echo "No lint script"
-        working-directory: backend
+        working-directory: ./backend
 
       - name: Test Backend
         run: npm test || echo "No test script"
-        working-directory: backend
+        working-directory: ./backend
 
       # Frontend
       - name: Install Frontend dependencies
         run: npm install
-        working-directory: frontend
+        working-directory: ./frontend
 
       - name: Lint Frontend
         run: npm run lint || echo "No lint script"
-        working-directory: frontend
+        working-directory: ./frontend
 
       - name: Test Frontend
         run: npm test || echo "No test script"
-        working-directory: frontend
-      
-      # Clean up Docker after tests
-      - name: Stop Docker containers
-        if: always()
-        run: docker compose down
+        working-directory: ./frontend
