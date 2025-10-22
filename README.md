@@ -7,7 +7,7 @@ A simple Todo List web application built with **JavaScript**, using **React** fo
 
 This short video shows how the todos maintain their order and state:
 - Drag and drop items to reorder them  
-- Refresh the page — the order stays the same  
+- The order stays the same even after refresh
 - Even without refreshing, added or saved todos remain visible and don’t disappear  
 
 https://github.com/user-attachments/assets/41caee1c-964f-45bb-b89a-d893d027cfb3
