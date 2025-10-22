@@ -68,19 +68,33 @@ function Todo() {
     );
   };
 
-  const onDragEnd = (result) => {
+  const onDragEnd = async (result) => {
     if (!result.destination) return;
     const items = Array.from(todos);
     const [reordered] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reordered);
     setTodos(items);
+
+    try {
+      // send new order to backend
+      await axios.post(`${API}/todos/reorder`, {
+        reordered: items.map(t => t._id)
+      });
+    } catch (err) {
+      console.error("Failed to save order", err);
+    }
   };
 
-  const filteredTodos = todos.filter(t =>
-    t.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
-    t.tags.toLowerCase().includes(searchTags.toLowerCase()) &&
-    (option === "all" || t.status === option)
-  );
+
+  const filteredTodos = todos.filter(t => {
+    const titleMatch = t.title?.toLowerCase().includes(searchTitle.toLowerCase());
+    // Join array of tags into a single lowercase string
+    const tagsText = Array.isArray(t.tags) ? t.tags.join(', ') : t.tags || '';
+    const tagsMatch = tagsText.toLowerCase().includes(searchTags.toLowerCase());
+    const statusMatch = option === "all" || t.status === option;
+    return titleMatch && tagsMatch && statusMatch;
+  });
+
 
   return (
     <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
@@ -121,21 +135,72 @@ function Todo() {
                               onChange={e => onChangeInline(t._id, "title", e.target.value)}
                               style={styles.editInput}
                             />
-                            <input
-                              value={t.tags}
-                              onChange={e => onChangeInline(t._id, "tags", e.target.value)}
-                              style={styles.editInput}
-                            />
+
+                            <div style={styles.tagsEditor}>
+                              {(Array.isArray(t.tags) ? t.tags : []).map((tag, i) => (
+                                <div key={i} style={styles.tagBox}>
+                                  <span>{tag}</span>
+                                  <button
+                                    onClick={() => {
+                                      const newTags = t.tags.filter((_, idx) => idx !== i);
+                                      onChangeInline(t._id, "tags", newTags);
+                                    }}
+                                    style={styles.removeTagBtn}
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              ))}
+
+                              <input
+                                placeholder="Add tag..."
+                                onKeyDown={e => {
+                                  if (e.key === ',' || e.key === 'Enter') {
+                                    e.preventDefault();
+                                    const value = e.target.value.trim();
+                                    if (value) {
+                                      const newTags = [...(t.tags || []), value];
+                                      onChangeInline(t._id, "tags", newTags);
+                                      e.target.value = '';
+                                    }
+                                  } else if (e.key === 'Backspace' && e.target.value === '') {
+                                    // remove last tag
+                                    const newTags = (t.tags || []).slice(0, -1);
+                                    onChangeInline(t._id, "tags", newTags);
+                                  }
+                                }}
+                                onBlur={e => {
+                                  const value = e.target.value.trim();
+                                  if (value) {
+                                    const newTags = [...(t.tags || []), value];
+                                    onChangeInline(t._id, "tags", newTags);
+                                  }
+                                  e.target.value = '';
+                                }}
+                                style={styles.tagInput}
+                              />
+                            </div>
                           </>
                         ) : (
                           <>
-                            <strong style={{ textDecoration: t.status === "completed" ? "line-through" : "none" }}>
+                            <strong
+                              style={{
+                                textDecoration: t.status === "completed" ? "line-through" : "none",
+                              }}
+                            >
                               {t.title}
                             </strong>
-                            <span style={styles.tags}>({t.tags})</span>
-                            <div style={styles.date}>{Moment(t.date).format("DD/MM/YYYY HH:mm")}</div>
+                            <div style={styles.tagsContainer}>
+                              {(Array.isArray(t.tags) ? t.tags : []).map((tag, i) => (
+                                <span key={i} style={styles.tagBoxStatic}>{tag}</span>
+                              ))}
+                            </div>
+                            <div style={styles.date}>
+                              {Moment(t.date).format("DD/MM/YYYY HH:mm")}
+                            </div>
                           </>
                         )}
+
                       </div>
 
                       <div style={{ display: 'flex', gap: '5px', marginTop: '5px' }}>
@@ -176,6 +241,47 @@ const styles = {
   saveButton: { backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '6px', padding: '5px 10px', cursor: 'pointer' },
   deleteButton: { backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '6px', padding: '5px 10px', cursor: 'pointer' },
   editInput: { padding: '5px', marginRight: '5px', borderRadius: '4px', border: '1px solid #ccc', minWidth: '100px' },
+    tagsEditor: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "6px",
+    marginTop: "5px",
+    alignItems: "center",
+  },
+  tagBox: {
+    background: "#e0e0e0",
+    padding: "4px 8px",
+    borderRadius: "12px",
+    display: "flex",
+    alignItems: "center",
+    gap: "4px",
+  },
+  removeTagBtn: {
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+    fontWeight: "bold",
+    color: "#555",
+  },
+  tagInput: {
+    border: "none",
+    outline: "none",
+    minWidth: "80px",
+    padding: "4px",
+  },
+  tagsContainer: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "6px",
+    marginTop: "5px",
+  },
+  tagBoxStatic: {
+    background: "#d0ebff",
+    padding: "4px 8px",
+    borderRadius: "12px",
+    fontSize: "0.85rem",
+  },
+
 };
 
 export default Todo;
